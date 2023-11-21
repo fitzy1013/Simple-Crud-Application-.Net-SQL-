@@ -1,0 +1,30 @@
+﻿@page
+@using System.Data.SqlClient
+@{
+	try
+	{
+		String id = Request.Query["id"];
+
+		String connectionString = "Data Source=localhost;Initial Catalog=mystore;Integrated Security=True;Encrypt=True;TrustServerCertificate=True";
+
+		using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+		{
+			sqlConnection.Open();
+
+			String sql = "DELETE FROM employees WHERE id=@id";
+			using (SqlCommand sqlCommand = new SqlCommand(sql, sqlConnection))
+			{
+				sqlCommand.Parameters.AddWithValue("id", id);
+
+				sqlCommand.ExecuteNonQuery();
+			}
+		}
+	}
+
+	catch (Exception ex)
+	{
+		Console.WriteLine(ex.Message);
+	}
+
+	Response.Redirect("/Employees/Index");
+}
